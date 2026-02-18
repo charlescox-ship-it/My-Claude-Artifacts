@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindvalley Campaign Launch Calendar</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f0f4f8;
+    padding: 40px;
+    color: #1a202c;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+.badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white;
+    padding: 8px 22px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+}
+.header h1 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 6px;
+}
+.header p { color: #64748b; font-size: 13px; }
+
+/* LEGEND */
+.legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+}
+.lswatch {
+    width: 36px;
+    height: 10px;
+    border-radius: 999px;
+}
+
+/* CALENDAR CARD */
+.cal-card {
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* Column sizing */
+col.c-pathway { width: 96px; }
+col.c-quest   { width: 164px; }
+col.c-type    { width: 72px; }
+col.c-day     { /* auto */ }
+
+/* Month row */
+.th-month {
+    background: #0f172a;
+    color: white;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 4px;
+    letter-spacing: 0.4px;
+    border-right: 1px solid #1e293b;
+}
+
+/* Date row */
+.th-date {
+    background: #f8fafc;
+    text-align: center;
+    padding: 6px 0;
+    border-right: 1px solid #e9ecef;
+    border-bottom: 2px solid #e2e8f0;
+}
+.th-date .dn { font-size: 10.5px; font-weight: 700; color: #1e293b; }
+.th-date .dd { font-size: 8.5px; color: #94a3b8; margin-top: 1px; }
+.th-date.ms  { border-left: 2px solid #cbd5e1; }
+
+/* Pathway label */
+td.pathway {
+    vertical-align: middle;
+    text-align: center;
+    font-size: 10.5px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: 0.4px;
+    padding: 6px 2px;
+    border-right: 1px solid rgba(255,255,255,0.15);
+}
+td.pathway.mf { background: #ea580c; }
+td.pathway.ai { background: #7c3aed; }
+td.pathway.sp { background: #0284c7; }
+
+/* Quest name */
+td.qname {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #1e293b;
+    padding: 0 10px;
+    vertical-align: middle;
+    border-right: 1px solid #f1f5f9;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Campaign type label */
+td.ctype {
+    font-size: 9px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0 8px;
+    vertical-align: middle;
+    border-right: 1px solid #f1f5f9;
+    white-space: nowrap;
+}
+
+/* Day cell */
+td.dc {
+    border-right: 1px solid #f1f5f9;
+    height: 22px;
+    padding: 3px 1px;
+    vertical-align: middle;
+}
+td.dc.ms { border-left: 2px solid #e2e8f0; }
+
+/* Filled bar cells */
+td.cn1-s { background: #f59e0b; border-right: none; border-radius: 6px 0 0 6px; padding: 3px 0; }
+td.cn1-m { background: #f59e0b; border-right: none; padding: 3px 0; }
+td.cn1-e { background: #f59e0b; border-radius: 0 6px 6px 0; padding: 3px 0; }
+td.cn1-se{ background: #f59e0b; border-radius: 6px; padding: 3px 0; }
+
+td.ts-s  { background: #7c3aed; border-right: none; border-radius: 6px 0 0 6px; padding: 3px 0; }
+td.ts-m  { background: #7c3aed; border-right: none; padding: 3px 0; }
+td.ts-e  { background: #7c3aed; border-radius: 0 6px 6px 0; padding: 3px 0; }
+
+td.pr-s  { background: #2563eb; border-right: none; border-radius: 6px 0 0 6px; padding: 3px 0; }
+td.pr-m  { background: #2563eb; border-right: none; padding: 3px 0; }
+td.pr-e  { background: #2563eb; border-right: none; padding: 3px 0; } /* no end — arrow continues */
+
+td.rt-s  { background: #0f766e; border-right: none; border-radius: 6px 0 0 6px; padding: 3px 0; }
+td.rt-m  { background: #0f766e; border-right: none; padding: 3px 0; }
+
+/* Arrow continuation cell */
+td.cont {
+    padding: 2px 6px 2px 0;
+    vertical-align: middle;
+    border-right: none;
+    white-space: nowrap;
+}
+.cont-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #64748b;
+    white-space: nowrap;
+}
+.cont-arrow .arr { font-size: 11px; }
+
+/* Section separators */
+tr.quest-first td { border-top: 2px solid #e2e8f0; }
+tr.type-row td    { border-bottom: none; }
+tr.type-row-last td { border-bottom: 1px solid #f1f5f9; }
+
+/* Pathway separator */
+tr.path-sep td { border-top: 3px solid #e2e8f0; }
+
+/* Notes */
+.notes {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 14px;
+}
+.note {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    padding: 14px 16px;
+    font-size: 11.5px;
+    color: #374151;
+    line-height: 1.65;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.note-title {
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+.ndot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="badge">Mindvalley · USA Market · All Pathways</div>
+    <h1>Campaign Launch Calendar — Q1 2026</h1>
+    <p>Creative testing → Prospecting → Retargeting · Anchored to CN1 review dates</p>
+</div>
+
+<div class="legend">
+    <div class="legend-item"><div class="lswatch" style="background:#f59e0b;"></div>CN1 review</div>
+    <div class="legend-item"><div class="lswatch" style="background:#7c3aed;"></div>Testing campaign (7 days)</div>
+    <div class="legend-item"><div class="lswatch" style="background:#2563eb;"></div>Prospecting (always on)</div>
+    <div class="legend-item"><div class="lswatch" style="background:#0f766e;"></div>Retargeting (always on)</div>
+</div>
+
+<div class="cal-card">
+<table>
+<colgroup>
+    <col class="c-pathway">
+    <col class="c-quest">
+    <col class="c-type">
+    <!-- Feb 23–28: 6 cols -->
+    <col><col><col><col><col><col>
+    <!-- Mar 1–31: 31 cols -->
+    <col><col><col><col><col><col><col><col><col><col>
+    <col><col><col><col><col><col><col><col><col><col>
+    <col><col><col><col><col><col><col><col><col><col>
+    <col>
+</colgroup>
+<thead>
+<tr>
+    <th style="background:#0f172a;border-right:1px solid #1e293b;" colspan="2"></th>
+    <th style="background:#0f172a;border-right:2px solid #334155;"></th>
+    <th class="th-month" colspan="6">February 2026</th>
+    <th class="th-month" colspan="31" style="border-right:none;">March 2026</th>
+</tr>
+<tr>
+    <th style="background:#f8fafc;border-right:1px solid #e9ecef;" colspan="2"></th>
+    <th style="background:#f8fafc;border-right:2px solid #cbd5e1;border-bottom:2px solid #e2e8f0;font-size:9px;color:#94a3b8;font-weight:600;text-align:left;padding-left:8px;">Campaign</th>
+    <!-- Feb 23–28 -->
+    <th class="th-date"><div class="dn">23</div><div class="dd">M</div></th>
+    <th class="th-date"><div class="dn">24</div><div class="dd">T</div></th>
+    <th class="th-date"><div class="dn">25</div><div class="dd">W</div></th>
+    <th class="th-date"><div class="dn">26</div><div class="dd">T</div></th>
+    <th class="th-date"><div class="dn">27</div><div class="dd">F</div></th>
+    <th class="th-date"><div class="dn">28</div><div class="dd">S</div></th>
+    <!-- Mar -->
+    <th class="th-date ms"><div class="dn">1</div><div class="dd">S</div></th>
+    <th class="th-date"><div class="dn">2</div><div class="dd">M</div></th>
+    <th class="th-date"><div class="dn">3</div><div class="dd">T</div></th>
+    <th class="th-date"><div class="dn">4</div><div class="dd">W</div></th>
+    <th class="th-date"><div class="dn">5</div><div class="dd">T</div></th>
+    <th class="th-date"><div class="dn">6</div><div class="dd">F</div></th>
+    <th class="th-date"><div class="dn">7</div><div class="dd">S</div></th>
+    <th class="th-date"><div class="dn">8</div><div class="dd">S</div></th>
+    <th class="th-date"><div class="dn">9</div><div class="dd">M</div></th>
+    <th class="th-date"><div class="dn">10</div><div class="dd">T</div></th>
+    <th class="th-date"><div class="dn">11</div><div class="dd">W</div></th>
+    <th class="th-date"><div class="dn">12</div><div class="dd">T</div></th>
+    <th class="th-date"><div class="dn">13</div><div class="dd">F</div></th>
+    <th class="th-date"><div class="dn">14</div><div class="dd">S</div></th>
+    <th class="th-date"><div class="dn">15</div><div class="dd">S</div></th>
+    <th class="th-date"><div class="dn">16</div><div class="dd">M</div></th>
+    <th class="th-date"><div class="dn">17</div><div class="dd">T</div></th>
+    <th class="th-date"><div class="dn">18</div><div class="dd">W</div></th>
+    <th class="th-date"><div class="dn">19</div><div class="dd">T</div></th>
+    <th class="th-date"><div class="dn">20</div><div class="dd">F</div></th>
+    <th class="th-date"><div class="dn">21</div><div class="dd">S</div></th>
+    <th class="th-date"><div class="dn">22</div><div class="dd">S</div></th>
+    <th class="th-date"><div class="dn">23</div><div class="dd">M</div></th>
+    <th class="th-date"><div class="dn">24</div><div class="dd">T</div></th>
+    <th class="th-date"><div class="dn">25</div><div class="dd">W</div></th>
+    <th class="th-date"><div class="dn">26</div><div class="dd">T</div></th>
+    <th class="th-date"><div class="dn">27</div><div class="dd">F</div></th>
+    <th class="th-date"><div class="dn">28</div><div class="dd">S</div></th>
+    <th class="th-date"><div class="dn">29</div><div class="dd">S</div></th>
+    <th class="th-date"><div class="dn">30</div><div class="dd">M</div></th>
+    <th class="th-date" style="border-right:none;"><div class="dn">31</div><div class="dd">T</div></th>
+</tr>
+</thead>
+<tbody>
+
+<!-- ══════════ MANIFESTING ══════════ -->
+<!-- SILVA: CN1 Feb23 | Test Feb24–Mar2 | Prosp Mar3→ | Retarg Mar17→ -->
+<tr class="quest-first type-row">
+    <td class="pathway mf" rowspan="8">Manifesting</td>
+    <td class="qname" rowspan="2">Silva Ultramind<br>System</td>
+    <td class="ctype">Testing</td>
+    <td class="cn1-se"></td><!-- 23 CN1 -->
+    <td class="ts-s"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><!-- 24–28 -->
+    <td class="ts-m ms"></td><td class="ts-e"></td><!-- Mar1–2 -->
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td></tr>
+<tr class="type-row-last">
+    <td class="ctype">Prosp / Retarg</td>
+    <td class="dc"></td><!-- 23 -->
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><!-- 24–28 -->
+    <td class="dc ms"></td><td class="dc"></td><!-- Mar1–2 -->
+    <td class="pr-s"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><!-- Mar3–16 prosp -->
+    <td class="rt-s"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><!-- Mar17–31 -->
+    <td class="cont"><span class="cont-arrow"><span class="arr">→</span>Q2 &amp; beyond</span></td>
+</tr>
+
+<!-- BE EXTRAORDINARY: CN1 Feb26 | Test Feb27–Mar5 | Prosp Mar6→ | Retarg Mar20→ -->
+<tr class="quest-first type-row">
+    <td class="qname" rowspan="2">Be Extraordinary</td>
+    <td class="ctype">Testing</td>
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><!-- 23–25 -->
+    <td class="cn1-se"></td><!-- 26 CN1 -->
+    <td class="ts-s"></td><td class="ts-m"></td><!-- 27–28 -->
+    <td class="ts-m ms"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-e"></td><!-- Mar1–5 -->
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+</tr>
+<tr class="type-row-last">
+    <td class="ctype">Prosp / Retarg</td>
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><!-- 23–28 -->
+    <td class="dc ms"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><!-- Mar1–5 -->
+    <td class="pr-s"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><!-- Mar6–19 prosp -->
+    <td class="rt-s"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><!-- Mar20–31 -->
+    <td class="cont"><span class="cont-arrow"><span class="arr">→</span>Q2 &amp; beyond</span></td>
+</tr>
+
+<!-- DUALITY: CN1 Mar2 | Test Mar3–9 | Prosp Mar10→ | Retarg Mar24→ -->
+<tr class="quest-first type-row">
+    <td class="qname" rowspan="2">Duality</td>
+    <td class="ctype">Testing</td>
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><!-- Feb23–28 -->
+    <td class="dc ms"></td><td class="cn1-se"></td><!-- Mar1–2 CN1 -->
+    <td class="ts-s"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-e"></td><!-- Mar3–9 -->
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+</tr>
+<tr class="type-row-last">
+    <td class="ctype">Prosp / Retarg</td>
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+    <td class="dc ms"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><!-- Mar1–9 -->
+    <td class="pr-s"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><!-- Mar10–23 prosp -->
+    <td class="rt-s"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><!-- Mar24–31 -->
+    <td class="cont"><span class="cont-arrow"><span class="arr">→</span>Q2 &amp; beyond</span></td>
+</tr>
+
+<!-- ART OF MANIFESTING: CN1 Mar3 | Test Mar4–10 | Prosp Mar11→ | Retarg Mar25→ -->
+<tr class="quest-first type-row">
+    <td class="qname" rowspan="2">The Art of<br>Manifesting</td>
+    <td class="ctype">Testing</td>
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+    <td class="dc ms"></td><td class="dc"></td><td class="cn1-se"></td><!-- Mar3 CN1 -->
+    <td class="ts-s"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-e"></td><!-- Mar4–10 -->
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+</tr>
+<tr class="type-row-last">
+    <td class="ctype">Prosp / Retarg</td>
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+    <td class="dc ms"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><!-- Mar1–10 -->
+    <td class="pr-s"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><!-- Mar11–24 prosp -->
+    <td class="rt-s"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><!-- Mar25–31 -->
+    <td class="cont"><span class="cont-arrow"><span class="arr">→</span>Q2 &amp; beyond</span></td>
+</tr>
+
+<!-- ══════════ AI / ENTREPRENEURSHIP ══════════ -->
+<!-- AMPLIFY WITH AI: CN1 Mar2 | Test Mar3–9 | Prosp Mar10→ | Retarg Mar24→ -->
+<tr class="quest-first type-row path-sep">
+    <td class="pathway ai" rowspan="4">AI / Entre&shy;pre&shy;neur&shy;ship</td>
+    <td class="qname" rowspan="2">Amplify With AI</td>
+    <td class="ctype">Testing</td>
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+    <td class="dc ms"></td><td class="cn1-se"></td><!-- Mar2 CN1 -->
+    <td class="ts-s"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-e"></td><!-- Mar3–9 -->
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+</tr>
+<tr class="type-row-last">
+    <td class="ctype">Prosp / Retarg</td>
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+    <td class="dc ms"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+    <td class="pr-s"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td>
+    <td class="rt-s"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td>
+    <td class="cont"><span class="cont-arrow"><span class="arr">→</span>Q2 &amp; beyond</span></td>
+</tr>
+
+<!-- SUPERBRAIN: CN1 Mar3 | Test Mar4–10 | Prosp Mar11→ | Retarg Mar25→ -->
+<tr class="quest-first type-row">
+    <td class="qname" rowspan="2">Superbrain</td>
+    <td class="ctype">Testing</td>
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+    <td class="dc ms"></td><td class="dc"></td><td class="cn1-se"></td>
+    <td class="ts-s"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-e"></td>
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+</tr>
+<tr class="type-row-last">
+    <td class="ctype">Prosp / Retarg</td>
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+    <td class="dc ms"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+    <td class="pr-s"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td>
+    <td class="rt-s"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td>
+    <td class="cont"><span class="cont-arrow"><span class="arr">→</span>Q2 &amp; beyond</span></td>
+</tr>
+
+<!-- ══════════ SPEAKING ══════════ -->
+<!-- 7FC: CN1 Mar5 | Test Mar6–12 | Prosp Mar13→ | Retarg Mar27→ -->
+<tr class="quest-first type-row path-sep">
+    <td class="pathway sp" rowspan="2">Speaking</td>
+    <td class="qname" rowspan="2">Seven Figure<br>Creator</td>
+    <td class="ctype">Testing</td>
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+    <td class="dc ms"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="cn1-se"></td><!-- Mar5 CN1 -->
+    <td class="ts-s"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-m"></td><td class="ts-e"></td><!-- Mar6–12 -->
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+</tr>
+<tr class="type-row-last">
+    <td class="ctype">Prosp / Retarg</td>
+    <td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+    <td class="dc ms"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td><td class="dc"></td>
+    <td class="pr-s"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><td class="pr-m"></td><!-- Mar13–26 prosp -->
+    <td class="rt-s"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><td class="rt-m"></td><!-- Mar27–31 -->
+    <td class="cont"><span class="cont-arrow"><span class="arr">→</span>Q2 &amp; beyond</span></td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+<div class="notes">
+    <div class="note">
+        <div class="note-title"><div class="ndot" style="background:#f59e0b;"></div>CN1 review</div>
+        Internal green-light session where ads, landing pages, email sequences and campaign setup are reviewed and signed off before any campaign launches. Nothing goes live without CN1 approval.
+    </div>
+    <div class="note">
+        <div class="note-title"><div class="ndot" style="background:#7c3aed;"></div>Testing campaign (7 days)</div>
+        Launches the day after CN1. Static ads only, ABO, 3 ads per ad set optimised for link clicks. Budget $50–75 per variant (~$450–675 per quest). Results reviewed on day 7 — winning outcomes and angles inform creative production priorities.
+    </div>
+    <div class="note">
+        <div class="note-title"><div class="ndot" style="background:#2563eb;"></div>Prospecting (always on)</div>
+        Launches 8 days post-CN1, informed by testing signals. CBO, broad + ASC audiences, conversion-optimised. 3 outcome-based ad sets with 5–10 diverse creatives each. Runs continuously — all campaigns continue into Q2 and beyond.
+    </div>
+    <div class="note">
+        <div class="note-title"><div class="ndot" style="background:#0f766e;"></div>Retargeting (always on)</div>
+        Launches ~14 days after prospecting, once warm and hot audiences have built to sufficient scale. Single ad set combining warm + hot. 75% quest-specific creative, 25% pathway/collection-level. Runs continuously alongside prospecting.
+    </div>
+</div>
+
+</body>
+</html>
