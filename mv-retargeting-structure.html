@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindvalley Retargeting Structure</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #fff7ed 0%, #fef2f2 50%, #fff7ed 100%);
+            padding: 40px 32px;
+            color: #1f2937;
+        }
+
+        .header { text-align: center; margin-bottom: 48px; }
+        .header-badge {
+            display: inline-block;
+            background: linear-gradient(to right, #ea580c, #dc2626);
+            color: white;
+            padding: 10px 28px;
+            border-radius: 9999px;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .header h1 { font-size: 32px; font-weight: 800; color: #111827; margin-bottom: 8px; }
+        .header p { color: #6b7280; font-size: 15px; }
+
+        /* TWO CAMPAIGN GRID */
+        .campaigns-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        .campaign-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            padding: 28px;
+            border: 3px solid;
+        }
+        .campaign-card.mc { border-color: #fdba74; }
+        .campaign-card.ds { border-color: #fca5a5; }
+
+        .campaign-header {
+            border-radius: 12px;
+            padding: 16px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .campaign-header.mc { background: linear-gradient(to right, #ea580c, #f97316); }
+        .campaign-header.ds { background: linear-gradient(to right, #dc2626, #991b1b); }
+        .campaign-header .title { font-size: 18px; font-weight: 800; }
+        .campaign-header .subtitle { font-size: 12px; opacity: 0.9; margin-top: 4px; }
+        .campaign-header .optimise { 
+            display: inline-block;
+            background: rgba(255,255,255,0.25); 
+            border-radius: 9999px; 
+            padding: 4px 14px; 
+            font-size: 11px; 
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        /* RATIONALE */
+        .rationale {
+            background: #f8fafc;
+            border-left: 4px solid #f97316;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            font-size: 12.5px;
+            color: #374151;
+            line-height: 1.6;
+        }
+        .rationale.red { border-left-color: #dc2626; }
+
+        /* SECTION TITLE */
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* AUDIENCE BOX */
+        .audience-box {
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 16px;
+            border: 2px solid;
+        }
+        .audience-box.mc { background: #fff7ed; border-color: #fdba74; }
+        .audience-box.ds { background: #fef2f2; border-color: #fca5a5; }
+
+        .audience-item {
+            font-size: 13px;
+            color: #374151;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .audience-item:last-child { border-bottom: none; }
+        .audience-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+        .audience-dot.include { background: #16a34a; }
+        .audience-dot.exclude { background: #dc2626; }
+
+        .exclude-box {
+            background: #fef2f2;
+            border: 2px dashed #fca5a5;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 10px;
+        }
+        .exclude-box.orange { background: #fff7ed; border-color: #fdba74; }
+        .exclude-title { font-size: 11px; font-weight: 700; color: #991b1b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .exclude-title.orange { color: #9a3412; }
+        .exclude-item { font-size: 12.5px; color: #374151; margin-bottom: 3px; }
+
+        /* AD SET BOX */
+        .adset-box {
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border: 2px solid;
+        }
+        .adset-box.mc { background: #fff7ed; border-color: #fdba74; }
+        .adset-box.ds { background: #fef2f2; border-color: #fca5a5; }
+        .adset-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+        .adset-title.mc { color: #9a3412; }
+        .adset-title.ds { color: #991b1b; }
+        .adset-subtitle { font-size: 11.5px; color: #6b7280; margin-bottom: 10px; }
+
+        /* CREATIVE PILLS */
+        .creative-pill {
+            display: inline-block;
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: 500;
+            margin: 3px 3px 3px 0;
+            border: 1px solid;
+        }
+        .creative-pill.mc { background: white; border-color: #fdba74; color: #374151; }
+        .creative-pill.ds { background: white; border-color: #fca5a5; color: #374151; }
+        .creative-pill.exclusive {
+            background: #fef9c3;
+            border-color: #fde047;
+            color: #713f12;
+            font-weight: 700;
+        }
+
+        /* DESTINATION BOX */
+        .destination-box {
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 16px;
+            border: 2px solid;
+            text-align: center;
+        }
+        .destination-box.mc { background: linear-gradient(135deg, #fff7ed, #fef2f2); border-color: #fdba74; }
+        .destination-box.ds { background: linear-gradient(135deg, #fef2f2, #fff1f2); border-color: #fca5a5; }
+        .destination-title { font-weight: 800; font-size: 15px; margin-bottom: 4px; }
+        .destination-title.mc { color: #9a3412; }
+        .destination-title.ds { color: #991b1b; }
+        .destination-desc { font-size: 12px; color: #374151; line-height: 1.6; }
+
+        /* NOTE BOX */
+        .note-box {
+            background: #fefce8;
+            border: 2px solid #fde68a;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 12px;
+            color: #374151;
+            margin-top: 12px;
+            line-height: 1.6;
+        }
+        .note-title { font-weight: 700; color: #92400e; margin-bottom: 4px; font-size: 12.5px; }
+
+        /* DIVIDER */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0 16px 0;
+        }
+        .divider-line { flex: 1; height: 1px; background: #e5e7eb; }
+        .divider-label { font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* FOOTER */
+        .footer {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border: 2px solid #bfdbfe;
+            border-radius: 20px;
+            padding: 32px;
+            color: #1f2937;
+        }
+        .footer h3 { font-size: 20px; font-weight: 800; text-align: center; margin-bottom: 8px; color: #1e3a8a; }
+        .footer-subtitle { text-align: center; font-size: 13px; color: #3b82f6; margin-bottom: 24px; }
+        .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .footer-card {
+            border-radius: 12px;
+            padding: 18px;
+        }
+        .footer-card.warm { background: linear-gradient(135deg, #fff7ed, #ffedd5); border: 2px solid #fdba74; }
+        .footer-card.hot { background: linear-gradient(135deg, #f8fafc, #f1f5f9); border: 2px solid #94a3b8; }
+        .footer-card-title { font-weight: 800; font-size: 15px; margin-bottom: 10px; }
+        .footer-card.warm .footer-card-title { color: #9a3412; }
+        .footer-card.hot .footer-card-title { color: #991b1b; }
+        .footer-item { font-size: 12.5px; line-height: 1.9; color: #374151; }
+
+        .tag {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        .tag.exclusive { background: #fef9c3; color: #713f12; }
+        .tag.shared { background: #dcfce7; color: #166534; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-badge">🎯 Mindvalley Membership · Retargeting Strategy · Global (English-Speaking Markets)</div>
+        <h1>Retargeting Campaign Structure</h1>
+        <p>Example Quest: Be Extraordinary &nbsp;·&nbsp; Two separate campaigns mapped to audience intent level</p>
+    </div>
+
+    <div class="campaigns-grid">
+
+        <!-- ===== CAMPAIGN 1: MASTERCLASS ===== -->
+        <div class="campaign-card mc">
+            <div class="campaign-header mc">
+                <div class="title">📺 WARM RETARGETING</div>
+                <div class="subtitle">Warm Audiences — Masterclass Re-engagement</div>
+                <div class="optimise">Optimise for: Masterclass Registration</div>
+            </div>
+
+            <div class="rationale">
+                <strong>Strategic role:</strong> These audiences have engaged with Be Extraordinary content but haven't registered for the masterclass yet. They haven't had the full education and trust-building experience, so pushing a direct sale is premature. The job here is to get them to watch the masterclass — which does the selling for us.
+            </div>
+
+            <!-- AUDIENCES -->
+            <div class="section-title">👥 Audiences (Single Ad Set)</div>
+            <div class="audience-box mc">
+                <div class="audience-item">
+                    <div class="audience-dot include"></div>
+                    <div><strong>25% video viewers</strong> — from Be Extraordinary prospecting ads (short-form) or VSL ads</div>
+                </div>
+                <div class="audience-item">
+                    <div class="audience-dot include"></div>
+                    <div><strong>Link clickers</strong> — clicked ads leading to VSL page or masterclass registration page, did not register (60 days)</div>
+                </div>
+                <div class="exclude-box orange" style="margin-top: 10px;">
+                    <div class="exclude-title orange">⛔ Exclusions</div>
+                    <div class="exclude-item">• 50%+ VSL video viewers</div>
+                    <div class="exclude-item">• Masterclass registrants</div>
+                    <div class="exclude-item">• Repeat site visitors (2+ visits, 30 days)</div>
+                    <div class="exclude-item">• Add to carts + checkout abandoners</div>
+                    <div class="exclude-item">• Existing members / purchasers</div>
+                </div>
+            </div>
+
+
+
+            <!-- AD SET -->
+            <div class="section-title">📋 Ad Set</div>
+            <div class="adset-box mc">
+                <div class="adset-title mc">Single Ad Set · Warm Audiences</div>
+                <div class="adset-subtitle">Quest-specific creatives only (Be Extraordinary) · Video & banner formats</div>
+                <span class="creative-pill mc">Outcomes Focus</span>
+                <span class="creative-pill mc">Testimonials</span>
+                <span class="creative-pill mc">Results in Advance</span>
+                <span class="creative-pill mc">Problem Agitation</span>
+                <span class="creative-pill mc">Humour / Pattern Interrupt</span>
+            </div>
+
+            <div class="note-box">
+                <div class="note-title">🎨 Creative Notes — Video & Banner Formats</div>
+                All creative types can run as both video and static banner formats. Outcome-based videos are short, focused on the specific transformation this quest drives. Results in advance shows the outcome they can expect before registering, building desire. Problem agitation re-surfaces the pain point that makes this quest relevant. Humour and pattern interrupt help break through scroll fatigue on audiences who may have already seen prospecting ads. Teacher credibility builds trust for those who engaged but weren't yet convinced. Banners work particularly well for outcome messaging and testimonial pull-quotes.
+            </div>
+
+            <!-- DESTINATION -->
+            <div class="destination-box mc">
+                <div class="destination-title mc">→ Destination: Masterclass Registration Page</div>
+                <div class="destination-desc">Same registration page as prospecting. Outcome-congruent with the ad that drove original engagement.</div>
+            </div>
+        </div>
+
+        <!-- ===== CAMPAIGN 2: DIRECT SALES ===== -->
+        <div class="campaign-card ds">
+            <div class="campaign-header ds">
+                <div class="title">💳 HIGH INTENT RETARGETING</div>
+                <div class="subtitle">High Intent Audiences — Direct Sales</div>
+                <div class="optimise">Optimise for: Purchase</div>
+            </div>
+
+            <div class="rationale red">
+                <strong>Strategic role:</strong> These audiences have already been through the education — they've registered for or watched the masterclass, or have shown high purchase intent through cart/checkout behaviour. Sending them back to another masterclass is unnecessary friction. The job now is to remove the final barrier to purchase: handle objections, reinforce value, and create urgency.
+            </div>
+
+            <!-- AUDIENCES -->
+            <div class="section-title">👥 Audiences (Single Ad Set)</div>
+            <div class="audience-box ds">
+                <div class="audience-item">
+                    <div class="audience-dot include"></div>
+                    <div><strong>50%+ video viewers</strong> — from Be Extraordinary VSL ads (15+ minutes watched — substantial sales exposure)</div>
+                </div>
+                <div class="audience-item">
+                    <div class="audience-dot include"></div>
+                    <div><strong>Masterclass registrants</strong> — registered for Be Extraordinary masterclass, did not purchase</div>
+                </div>
+                <div class="audience-item">
+                    <div class="audience-dot include"></div>
+                    <div><strong>Repeat site visitors</strong> — visited Be Extraordinary pages 2+ times (30 days)</div>
+                </div>
+                <div class="audience-item">
+                    <div class="audience-dot include"></div>
+                    <div><strong>Add to carts + further down funnel</strong> — initiated checkout or abandoned at payment</div>
+                </div>
+                <div class="exclude-box" style="margin-top: 10px;">
+                    <div class="exclude-title">⛔ Exclusions</div>
+                    <div class="exclude-item">• Existing members / purchasers</div>
+                </div>
+            </div>
+
+
+
+            <!-- AD SET -->
+            <div class="section-title">📋 Ad Set</div>
+            <div class="adset-box ds">
+                <div class="adset-title ds">Single Ad Set · High Intent Audiences</div>
+                <div class="adset-subtitle">Quest + pathway-focused creatives (Be Extraordinary & Manifesting Collection) · Video & banner formats</div>
+                <span class="creative-pill ds">Objection Handlers</span>
+                <span class="creative-pill ds">Pathway Expansion</span>
+                <span class="creative-pill ds">Testimonials</span>
+                <span class="creative-pill ds">Teacher Credibility</span>
+                <span class="creative-pill exclusive">⭐ Offer-Led / Urgency</span>
+            </div>
+
+            <div class="note-box">
+                <div class="note-title">🎨 Creative Notes</div>
+                Objection handlers address purchase barriers — price, time commitment, "will it work for me?". Pathway expansion ads introduce the broader collection value — what else is included beyond the featured quest, the full scope of the pathway. Testimonials focus on transformation outcomes. Teacher credibility reinforces authority and trust at the point of decision. Offer-led creative — payment plans, money-back guarantee, limited bonus — is <strong>exclusive to this campaign</strong>; these people are sold on the concept, the job is removing the final friction.
+            </div>
+
+            <!-- DESTINATION -->
+            <div class="destination-box ds">
+                <div class="destination-title ds">→ Destination: Quest Sales Page</div>
+                <div class="destination-desc">Be Extraordinary-focused landing page selling the Manifesting Collection. Outcome-congruent. No masterclass re-registration required.</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <h3>Retargeting Strategy: Key Principles</h3>
+        <p class="footer-subtitle">Two campaigns mapped to intent and journey — not one undifferentiated retargeting pool</p>
+        <div class="footer-grid">
+            <div style="border-radius: 12px; padding: 18px; background: linear-gradient(135deg, #fff7ed, #ffedd5); border: 2px solid #fdba74;">
+                <div class="footer-card-title">📺 Warm Retargeting</div>
+                <div class="footer-item">
+                    ✓ Audiences: 25% video viewers + LP visitors<br>
+                    ✓ Exclude all high intent audiences + purchasers<br>
+                    ✓ Optimise: purchase event<br>
+                    ✓ Quest-specific creatives only<br>
+                    ✓ Video & banner formats<br>
+                    ✓ Destination: masterclass registration page<br>
+                    ✓ Journey: ad → registration → masterclass → sales page → purchase
+                </div>
+            </div>
+            <div class="footer-card">
+                <div class="footer-card-title">💳 High Intent Retargeting</div>
+                <div class="footer-item">
+                    ✓ Audiences: 50%+ VSL viewers, MC registrants, repeat visitors, add to carts<br>
+                    ✓ Exclude: purchasers only<br>
+                    ✓ Optimise: purchase event<br>
+                    ✓ Quest + pathway-focused creatives<br>
+                    ✓ Offer-led / urgency creative exclusive to this campaign<br>
+                    ✓ Destination: quest sales page (direct)<br>
+                    ✓ Journey: ad → sales page → purchase
+                </div>
+            </div>
+        </div>
+        <div style="background: #f0fdf4; border: 2px solid #86efac; border-radius: 12px; padding: 18px; margin-top: 16px;">
+            <div style="font-weight: 800; font-size: 15px; margin-bottom: 10px; color: #166534;">⚠️ Why Two Separate Campaigns — Not Two Ad Sets</div>
+            <div style="font-size: 12.5px; line-height: 1.9; color: #374151;">
+                Although both campaigns optimise for the same purchase event, the conversion journeys are fundamentally different. Warm retargeting routes traffic through a multi-step masterclass funnel before reaching checkout. High intent retargeting goes direct to the sales page. Meta builds its optimisation model around the full path to conversion — not just the final event — so combining these journeys in one campaign creates conflicting signals and degrades algorithm performance. Two separate campaigns keeps the learning clean and the budget allocation deliberate.
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
